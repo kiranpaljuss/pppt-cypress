@@ -5,6 +5,7 @@
   "scripts": {
     "cypress:open": "cypress open --e2e --browser chrome --env 'TAGS=not @ignore'",
     "cypress:run": "yarn config:reports; yarn delete:reports; cypress run --env 'TAGS=not @ignore' --browser chrome; yarn report",
+    "cypress:run:parallel:features": "yarn config:reports; yarn delete:reports; tsx .tools/runFeaturesInParallel.ts; yarn report",
     "config:reports": "mkdir -p report/{HTML,JSON} cypress/screenshots",
     "delete:reports": "rm -rf report/JSON/* || true; rm -rf report/HTML/* || true; rm -rf cypress/videos/features/* || true",
     "lint:gherkin": "gherkin-lint",

@@ -50,6 +50,20 @@ yarn cypress:open
 yarn cypress:run
 ```
 
+3. Run all feature files in parallel (feature-level only, not scenario-level) and generate HTML report:
+
+```bash
+yarn cypress:run:parallel:features
+```
+
+Optional: set worker concurrency in `.env` with `FEATURE_PARALLEL_WORKERS`.
+
+```bash
+FEATURE_PARALLEL_WORKERS=3
+```
+
+If this value is not set, default worker count is `3`.
+
 ## Other Scripts
 
 1. Lint Gherkin feature files:
