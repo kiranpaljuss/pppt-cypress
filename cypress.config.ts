@@ -1,12 +1,12 @@
-const { defineConfig } = require('cypress');
-const fs = require('fs');
-const path = require('path');
-const createBundler = require('@bahmutov/cypress-esbuild-preprocessor');
-const addCucumberPreprocessorPlugin = require('@badeball/cypress-cucumber-preprocessor').addCucumberPreprocessorPlugin;
-const createEsbuildPlugin = require('@badeball/cypress-cucumber-preprocessor/esbuild').createEsbuildPlugin;
+import { defineConfig } from 'cypress';
+import fs from 'node:fs';
+import path from 'node:path';
+import createBundler from '@bahmutov/cypress-esbuild-preprocessor';
+import { addCucumberPreprocessorPlugin } from '@badeball/cypress-cucumber-preprocessor';
+import { createEsbuildPlugin } from '@badeball/cypress-cucumber-preprocessor/esbuild';
 
-function readEnvFile (fileName) {
-  const envPath = path.resolve(__dirname, fileName);
+function readEnvFile (fileName: string) {
+  const envPath = path.resolve(process.cwd(), fileName);
 
   if (!fs.existsSync(envPath)) {
     return {};
@@ -15,7 +15,7 @@ function readEnvFile (fileName) {
   return fs.readFileSync(envPath, 'utf8')
     .split(/\r?\n/)
     .filter((line) => line && !line.startsWith('#') && line.includes('='))
-    .reduce((acc, line) => {
+    .reduce<Record<string, string>>((acc, line) => {
       const firstEquals = line.indexOf('=');
       const key = line.slice(0, firstEquals).trim();
       const value = line.slice(firstEquals + 1).trim();
@@ -31,7 +31,7 @@ function readEnvFile (fileName) {
 const templateEnvValues = readEnvFile('.env.template');
 const dotEnvValues = readEnvFile('.env');
 
-module.exports = defineConfig({
+export default defineConfig({
   chromeWebSecurity: false,
   watchForFileChanges: false,
   viewportHeight: 720,
@@ -55,6 +55,6 @@ module.exports = defineConfig({
     specPattern: 'cypress/integration/features/**/*.feature',
     chromeWebSecurity: false,
     excludeSpecPattern: ['*.js', '*.md'],
-    experimentalMemoryManagement: true
+    experimentalMemoryManagement: true,
   },
 });

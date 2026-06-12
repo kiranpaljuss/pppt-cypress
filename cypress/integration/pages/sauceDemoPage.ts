@@ -27,11 +27,11 @@ class SauceDemoPage {
     return cy.get('.inventory_item_name');
   }
 
-  inventoryItemByName (itemName) {
+  inventoryItemByName (itemName: string) {
     return cy.contains('.inventory_item', itemName);
   }
 
-  addToCartButtonInItem (itemName) {
+  addToCartButtonInItem (itemName: string) {
     return this.inventoryItemByName(itemName).contains('button', 'Add to cart');
   }
 

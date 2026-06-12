@@ -1,11 +1,14 @@
-const pluginCypress = require('eslint-plugin-cypress/flat');
+const pluginCypress = require('eslint-plugin-cypress');
 const eslintPluginJsonc = require('eslint-plugin-jsonc');
+const tsParser = require('@typescript-eslint/parser');
 const jsoncParser = require('jsonc-eslint-parser');
 const js = require('@eslint/js');
 const globals = require('globals');
 
+const cypressRecommended = pluginCypress.configs.recommended;
+
 const cypressRules = {
-  ...pluginCypress.configs.recommended.rules,
+  ...cypressRecommended.rules,
   'cypress/no-unnecessary-waiting': 'off',
   'cypress/unsafe-to-chain-command': 'off',
 };
@@ -24,20 +27,20 @@ const jsoncRules = {
 
 const generalRules = {
   ...js.configs.recommended.rules,
-  'complexity': 'off',
+  complexity: 'off',
   'max-len': 'off',
   'max-params': ['error', 4],
   'max-statements': 'off',
   'max-depth': 'off',
   'max-nested-callbacks': 'off',
-  'indent': ['error', 2],
+  indent: ['error', 2],
   'linebreak-style': ['error', 'unix'],
   'space-before-function-paren': ['error', 'always'],
-  'curly': ['error', 'all'],
+  curly: ['error', 'all'],
   'brace-style': ['error', '1tbs'],
-  'quotes': ['warn', 'single', { avoidEscape: true }],
-  'eqeqeq': ['error', 'allow-null'],
-  'semi': ['error', 'always'],
+  quotes: ['warn', 'single', { avoidEscape: true }],
+  eqeqeq: ['error', 'allow-null'],
+  semi: ['error', 'always'],
   'new-cap': 'off',
   'no-console': 'off',
   'no-empty': 'off',
@@ -45,28 +48,43 @@ const generalRules = {
   'space-before-blocks': ['error', 'always'],
   'keyword-spacing': ['error', { before: true, after: true }],
   'no-trailing-spaces': ['error', { skipBlankLines: false }],
-  'eol-last': ['error', 'never'],
+  'eol-last': 'off',
 };
 
 module.exports = [
-  // Cypress rules configuration
   {
-    plugins: { cypress: pluginCypress },
+    ignores: ['report/**'],
+  },
+  {
+    plugins: cypressRecommended.plugins,
     languageOptions: {
       globals: {
-        ...pluginCypress.configs.recommended.languageOptions.globals,
+        ...cypressRecommended.languageOptions.globals,
       },
     },
     rules: cypressRules,
   },
-  // JSON rules configuration
   {
     files: ['**/*.json', '**/*.jsonc', '**/*.json5'],
     languageOptions: { parser: jsoncParser },
     plugins: { jsonc: eslintPluginJsonc },
     rules: jsoncRules,
   },
-  // General rules configuration
+  {
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+      },
+      globals: {
+        ...globals.node,
+        ...cypressRecommended.languageOptions.globals,
+      },
+    },
+    rules: generalRules,
+  },
   {
     languageOptions: {
       globals: {

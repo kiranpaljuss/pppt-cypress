@@ -1,6 +1,6 @@
 # pppt-cypress
 
-Cypress end-to-end and API test automation project using Cucumber feature files.
+Cypress end-to-end and API test automation project using Cucumber feature files and TypeScript.
 
 ## Prerequisites
 
@@ -26,6 +26,12 @@ nvm use
 
 ```bash
 yarn install
+```
+
+5. (Optional) Validate TypeScript compilation:
+
+```bash
+yarn typecheck
 ```
 
 ## Run Tests
@@ -58,6 +64,12 @@ yarn lint:gherkin
 yarn lint:files
 ```
 
+3. Generate report from JSON output using TypeScript runner:
+
+```bash
+yarn report
+```
+
 ## Reports
 
 1. JSON report output: `report/JSON/cucumber_report.json`
@@ -67,3 +79,4 @@ yarn lint:files
 
 1. Environment values are loaded from `.env.template` and `.env` (if present).
 2. Tests are filtered with `TAGS=not @ignore` in the Cypress run/open scripts.
+3. Step definitions, page objects, support files, and Cypress config are in TypeScript (`.ts`).

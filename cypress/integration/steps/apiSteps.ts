@@ -1,22 +1,22 @@
 import { Given, Then, When } from '@badeball/cypress-cucumber-preprocessor';
 import PageUrls from '../../support/urls';
 
-let response;
-let accountPayload;
+let response: Cypress.Response<any>;
+let accountPayload: Record<string, any>;
 const BASE_URL = PageUrls.automationExerciseApiBase();
 
-function parseResponseBody (body) {
+function parseResponseBody (body: unknown) {
   if (typeof body === 'string') {
-    return JSON.parse(body);
+    return JSON.parse(body) as Record<string, any>;
   }
 
-  return body;
+  return body as Record<string, any>;
 }
 
 function buildUniqueAccountPayload () {
   const uniquePart = `${Date.now()}-${Math.floor(Math.random() * 100000)}`;
 
-  return cy.fixture('accountPayload').then((payloadTemplate) => {
+  return cy.fixture('accountPayload').then((payloadTemplate: Record<string, any>) => {
     return {
       ...payloadTemplate,
       email: `cypress.user.${uniquePart}@example.com`,
@@ -25,9 +25,9 @@ function buildUniqueAccountPayload () {
   });
 }
 
-Given(/^I send a "(.*)" request to "(.*)"$/, (method, endpoint) => {
+Given(/^I send a "(.*)" request to "(.*)"$/, (method: string, endpoint: string) => {
   cy.request({
-    method: method,
+    method,
     url: `${BASE_URL}${endpoint}`,
     failOnStatusCode: false,
   }).then((res) => {
@@ -53,7 +53,7 @@ Given('I create the prepared account via API', () => {
   });
 });
 
-When(/^I send a "(.*)" request to "(.*)" with the prepared account payload$/, (method, endpoint) => {
+When(/^I send a "(.*)" request to "(.*)" with the prepared account payload$/, (method: string, endpoint: string) => {
   cy.request({
     method,
     url: `${BASE_URL}${endpoint}`,
@@ -74,16 +74,16 @@ When('I update the prepared account details', () => {
   };
 });
 
-Then(/^the response status should be "(.*)"$/, (statusCode) => {
+Then(/^the response status should be "(.*)"$/, (statusCode: string) => {
   expect(response.status).to.eq(Number(statusCode));
 });
 
-Then(/^the API response code should be "(.*)"$/, (apiCode) => {
+Then(/^the API response code should be "(.*)"$/, (apiCode: string) => {
   const parsedBody = parseResponseBody(response.body);
   expect(Number(parsedBody.responseCode)).to.eq(Number(apiCode));
 });
 
-Then(/^the API response message should be "(.*)"$/, (message) => {
+Then(/^the API response message should be "(.*)"$/, (message: string) => {
   const parsedBody = parseResponseBody(response.body);
   expect(parsedBody.message).to.eq(message);
 });
