@@ -1,0 +1,46 @@
+{
+  "name": "pppt-cypress",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "cypress:open": "cypress open --e2e --browser chrome --env 'TAGS=not @ignore'",
+    "cypress:run": "yarn config:reports; yarn delete:reports; cypress run --env 'TAGS=not @ignore' --browser chrome; yarn report",
+    "config:reports": "mkdir -p report/{HTML,JSON} cypress/screenshots",
+    "delete:reports": "rm -rf report/JSON/* || true; rm -rf report/HTML/* || true; rm -rf cypress/videos/features/* || true",
+    "lint:gherkin": "gherkin-lint",
+    "report": "node .tools/exportHTMLReport.mjs",
+    "lint:files": "lint-staged"
+  },
+  "dependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "24.0.1",
+    "@bahmutov/cypress-esbuild-preprocessor": "2.2.8",
+    "chalk": "5.6.2",
+    "cucumber-html-reporter": "^7.2.0",
+    "cypress": "15.17.0",
+    "fs-extra": "11.3.5"
+  },
+  "cypress-cucumber-preprocessor": {
+    "stepDefinitions": "cypress/integration/steps/**/*.js",
+    "json": {
+      "enabled": true,
+      "output": "report/JSON/cucumber_report.json"
+    },
+    "filterSpec": true,
+    "omitFiltered": true
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "eslint": "10.4.1",
+    "eslint-plugin-cypress": "6.4.1",
+    "eslint-plugin-jsonc": "3.2.0",
+    "gherkin-lint": "^4.2.4",
+    "globals": "17.6.0",
+    "jsonc-eslint-parser": "^3.1.0",
+    "lint-staged": "17.0.7"
+  },
+  "lint-staged": {
+    "*.{js,json}": [
+      "eslint --fix"
+    ]
+  }
+}
