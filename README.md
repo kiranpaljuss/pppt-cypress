@@ -4,35 +4,33 @@ Cypress end-to-end and API test automation project using Cucumber feature files 
 
 ## Prerequisites
 
-1. Visual Studio Code: https://code.visualstudio.com/download
-2. Google Chrome: https://www.google.com/chrome
-3. Node.js managed with nvm (project uses Node `v24`, see `.nvmrc`)
-4. Yarn Classic (`1.x`)
+1. Node.js version defined in `.nvmrc`
+2. Yarn
+3. VS Code
+4. Google Chrome
 
 ## Setup
 
 1. Clone this repository.
-2. Open the project in VS Code.
-3. In a terminal at the project root, run:
+2. Use the pinned Node.js version:
 
 ```bash
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-nvm install
 nvm use
 ```
 
-4. Install dependencies:
+3. Install dependencies:
 
 ```bash
 yarn install
 ```
 
-5. (Optional) Validate TypeScript compilation:
+4. Create local environment variables:
 
 ```bash
-yarn typecheck
+cp .env.template .env
 ```
+
+5. Update `.env` values as needed for your environment.
 
 ## Run Tests
 
@@ -94,3 +92,5 @@ yarn report
 1. Environment values are loaded from `.env.template` and `.env` (if present).
 2. Tests are filtered with `TAGS=not @ignore` in the Cypress run/open scripts.
 3. Step definitions, page objects, support files, and Cypress config are in TypeScript (`.ts`).
+
+*Last updated: 12 June 2026*
